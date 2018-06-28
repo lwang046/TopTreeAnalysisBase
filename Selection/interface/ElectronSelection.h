@@ -67,6 +67,8 @@ public:
     std::vector<TRootElectron*> GetSelectedElectrons(string WorkingPoint, string ProductionCampaign, bool CutsBased) const;
     std::vector<TRootElectron*> GetSelectedElectrons(float PTthr, float EtaThr, string WorkingPoint) const;
     std::vector<TRootElectron*> GetSelectedElectrons(float PTthr, float EtaThr, string WorkingPoint, string ProductionCampaign, bool CutsBased, bool applyVID) const;
+
+    std::vector<TRootElectron*> GetSelectedElectrons(float PTthr, float EtaThr, float ElectronRelIso, string WorkingPoint, string ProductionCampaign, bool CutsBased, bool applyVID) const;
     
     //displaced electrons
     std::vector<TRootElectron*> GetSelectedDisplacedElectrons (float PtThr, float EtaThr, float relIsoB, float relIsoEC, bool applyIso=true, bool applyId=true) const;
@@ -74,12 +76,12 @@ public:
     
 private:
 
-	std::vector<TRootElectron*> GetSelectedTightElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr) const;
-	std::vector<TRootElectron*> GetSelectedMediumElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr) const;
-	std::vector<TRootElectron*> GetSelectedLooseElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr) const;
-	std::vector<TRootElectron*> GetSelectedVetoElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr) const;
-  std::vector<TRootElectron*> GetSelectedFakeLooseElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr) const;
-  std::vector<TRootElectron*> GetSelectedFakeTightElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr) const;
+	std::vector<TRootElectron*> GetSelectedTightElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr, float ElectronRelIso) const;
+	std::vector<TRootElectron*> GetSelectedMediumElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr, float ElectronRelIso) const;
+	std::vector<TRootElectron*> GetSelectedLooseElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr, float ElectronRelIso) const;
+	std::vector<TRootElectron*> GetSelectedVetoElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr, float ElectronRelIso) const;
+  std::vector<TRootElectron*> GetSelectedFakeLooseElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr, float ElectronRelIso) const;
+  std::vector<TRootElectron*> GetSelectedFakeTightElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr, float ElectronRelIso) const;
   
 	std::vector<TRootElectron*> GetSelectedHeepElectronsCutsBasedSpring16_80X_VID(float PtThr, float EtaThr) const;
 	std::vector<TRootElectron*> GetSelectedTightElectronsCutsBasedSpring16_80X_VID(float PtThr, float EtaThr) const;

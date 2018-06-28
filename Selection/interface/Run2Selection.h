@@ -88,6 +88,8 @@ public:
     std::vector<TRootElectron*> GetSelectedElectrons(float PTthr, float EtaThr, string WorkingPoint) const;
     std::vector<TRootElectron*> GetSelectedElectrons(float PTthr, float EtaThr, string WorkingPoint, string ProductionCampaign, bool CutsBased, bool applyVID) const;
 
+    std::vector<TRootElectron*> GetSelectedElectrons(float PTthr, float EtaThr, float ElectronRelIso, string WorkingPoint, string ProductionCampaign, bool CutsBased, bool applyVID) const;
+
 
     // displaced electrons
     std::vector<TRootElectron*> GetSelectedDisplacedElectrons (float PtThr, float EtaThr, float relIsoB, float relIsoEC, bool applyIso=true, bool applyId=true) const;

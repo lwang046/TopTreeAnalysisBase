@@ -152,12 +152,53 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedElectrons(float PtThr,
   return GetSelectedElectrons(PtThr,etaThr,WorkingPoint,"Spring16_80X",true,true);
 }
 
+std::vector<TRootElectron*> ElectronSelection::GetSelectedElectrons(float PtThr, float etaThr, float relIso, string WorkingPoint, string ProductionCampaign, bool CutsBased, bool applyVID) const
+{
+  std::vector<TRootElectron* > ElectronCollection;
+
+  if (CutsBased == true && applyVID ==  false)
+  {
+    if (ProductionCampaign == "Spring16_80X" && WorkingPoint == "Tight")
+    {
+      ElectronCollection = GetSelectedTightElectronsCutsBasedSpring16_80X(PtThr, etaThr, relIso);
+    }
+    else if (ProductionCampaign == "Spring16_80X" && WorkingPoint == "Medium")
+    {
+      ElectronCollection = GetSelectedMediumElectronsCutsBasedSpring16_80X(PtThr, etaThr, relIso);
+    }
+    else if (ProductionCampaign == "Spring16_80X" && WorkingPoint == "Loose")
+    {
+      ElectronCollection = GetSelectedLooseElectronsCutsBasedSpring16_80X(PtThr, etaThr, relIso);
+    }
+    else if (ProductionCampaign == "Spring16_80X" && WorkingPoint == "Veto")
+    {
+      ElectronCollection = GetSelectedVetoElectronsCutsBasedSpring16_80X(PtThr, etaThr, relIso);
+    }
+    else if (ProductionCampaign == "Spring16_80X" && WorkingPoint == "FakeLoose")
+    {
+      ElectronCollection = GetSelectedFakeLooseElectronsCutsBasedSpring16_80X(PtThr, etaThr, relIso);
+    }
+    else if (ProductionCampaign == "Spring16_80X" && WorkingPoint == "FakeTight")
+    {
+      ElectronCollection = GetSelectedFakeTightElectronsCutsBasedSpring16_80X(PtThr, etaThr, relIso);
+    }
+    else
+    {
+      string printboolval="Cutbased=true, applyVID=false";
+      
+      throw std::invalid_argument( "received incorrect args to GetSelectedElectrons, requested: "+WorkingPoint+", "+ProductionCampaign+" "+printboolval);
+    }
+  }
+  return ElectronCollection;
+}
+
 std::vector<TRootElectron*> ElectronSelection::GetSelectedElectrons(float PtThr, float etaThr, string WorkingPoint, string ProductionCampaign, bool CutsBased, bool applyVID) const
 {
  // cout << "Get selected electrons " << endl;
  // cout <<  "PtThr " << PtThr << " etaThr " << etaThr << " WorkingPoint " << WorkingPoint << " ProductionCampaign " << ProductionCampaign << " CutsBased " << CutsBased << " applyVID " << applyVID << endl;
   std::vector<TRootElectron* > ElectronCollection;
-  if (CutsBased == true && applyVID ==  false)
+  //reserved for isocut use
+  /*if (CutsBased == true && applyVID ==  false)
   {
     if (ProductionCampaign == "Spring16_80X" && WorkingPoint == "Tight")
     {
@@ -190,7 +231,8 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedElectrons(float PtThr,
       throw std::invalid_argument( "received incorrect args to GetSelectedElectrons, requested: "+WorkingPoint+", "+ProductionCampaign+" "+printboolval);
     }
   }
-  else if (CutsBased == true && applyVID ==  true)
+  else*/
+  if (CutsBased == true && applyVID ==  true)
   {
     if (ProductionCampaign == "Spring16_80X" && WorkingPoint == "Heep")
     {
@@ -422,7 +464,7 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedDisplacedElectrons() c
 
 
 
-std::vector<TRootElectron*> ElectronSelection::GetSelectedTightElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr) const
+std::vector<TRootElectron*> ElectronSelection::GetSelectedTightElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr, float ElRelIso) const
 {
   // (PLEASE UPDATE IF YOU CHANGE THIS CODE)
   //These quality cuts reflect the recommended Tight cut-based electron ID as provided by the EGM POG. Last updated: 26 October 2016
@@ -444,7 +486,7 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedTightElectronsCutsBase
            && el->sigmaIEtaIEta_full5x5() < 0.00998
            && el->hadronicOverEm() < 0.0414
            && el->ioEmIoP() < 0.0129
-           && pfElectronIso(el) <  0.0588
+           && pfElectronIso(el) < ElRelIso//0.0588
            && el->missingHits() <= 1
            && el->passConversion())
         {
@@ -459,7 +501,7 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedTightElectronsCutsBase
            && el->sigmaIEtaIEta_full5x5() <  0.0292
            && (el->hadronicOverEm() < 0.0641)
            && el->ioEmIoP() < 0.0129
-           && pfElectronIso(el) < 0.0571
+           && pfElectronIso(el) < ElRelIso//0.0571
            && el->missingHits() <= 1
            && el->passConversion())
         {
@@ -473,7 +515,7 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedTightElectronsCutsBase
 }
 
 
-std::vector<TRootElectron*> ElectronSelection::GetSelectedMediumElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr) const
+std::vector<TRootElectron*> ElectronSelection::GetSelectedMediumElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr, float ElRelIso) const
 {
   // (PLEASE UPDATE IF YOU CHANGE THIS CODE)
   //These quality cuts reflect the recommended Tight cut-based electron ID as provided by the EGM POG. Last updated: 7 October 2016
@@ -493,7 +535,7 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedMediumElectronsCutsBas
            && el->sigmaIEtaIEta_full5x5() < 0.00998
            && el->hadronicOverEm() < 0.253
            && el->ioEmIoP() < 0.134
-           && pfElectronIso(el) <  0.0695
+           && pfElectronIso(el) < ElRelIso// 0.0695
            && el->missingHits() <= 1
            && el->passConversion())
         {
@@ -508,7 +550,7 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedMediumElectronsCutsBas
            && el->sigmaIEtaIEta_full5x5() <  0.0298
            && (el->hadronicOverEm() < 0.0878)
            && el->ioEmIoP() < 0.13
-           && pfElectronIso(el) < 0.0821
+           && pfElectronIso(el) < ElRelIso//0.0821
            && el->missingHits() <= 1
            && el->passConversion())
         {
@@ -522,7 +564,7 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedMediumElectronsCutsBas
 }
 
 
-std::vector<TRootElectron*> ElectronSelection::GetSelectedLooseElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr) const
+std::vector<TRootElectron*> ElectronSelection::GetSelectedLooseElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr, float ElRelIso) const
 {
   // (PLEASE UPDATE IF YOU CHANGE THIS CODE)
   //These quality cuts reflect the recommended Tight cut-based electron ID as provided by the EGM POG. Last updated: 7 October 2016
@@ -542,7 +584,7 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedLooseElectronsCutsBase
            && el->sigmaIEtaIEta_full5x5() < 0.011
            && el->hadronicOverEm() < 0.298
            && el->ioEmIoP() < 0.241
-           && pfElectronIso(el) <  0.0994
+           && pfElectronIso(el) < ElRelIso //0.0994
            && el->missingHits() <= 1
            && el->passConversion())
         {
@@ -557,7 +599,7 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedLooseElectronsCutsBase
            && el->sigmaIEtaIEta_full5x5() <  0.0314
            && (el->hadronicOverEm() < 0.101)
            && el->ioEmIoP() < 0.14
-           && pfElectronIso(el) < 0.107
+           && pfElectronIso(el) < ElRelIso//0.107
            && el->missingHits() <= 1
            && el->passConversion())
         {
@@ -570,7 +612,7 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedLooseElectronsCutsBase
   return selectedElectrons;
 }
 
-std::vector<TRootElectron*> ElectronSelection::GetSelectedFakeLooseElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr) const
+std::vector<TRootElectron*> ElectronSelection::GetSelectedFakeLooseElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr, float ElRelIso) const
 {
   // (PLEASE UPDATE IF YOU CHANGE THIS CODE)
   //These quality cuts reflect the recommended Tight cut-based electron ID as provided by the EGM POG. Last updated: 7 October 2016
@@ -590,7 +632,7 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedFakeLooseElectronsCuts
            && el->sigmaIEtaIEta_full5x5() < 0.011
            && el->hadronicOverEm() < 0.298
            && el->ioEmIoP() < 0.0129 // like tight id
-           && pfElectronIso(el) >=  0.0994 // invert iso
+           && pfElectronIso(el) >=  ElRelIso//0.0994 // invert iso
            && pfElectronIso(el) < 1 // extra cut on iso
            && el->missingHits() <= 1
            && el->passConversion())
@@ -606,7 +648,7 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedFakeLooseElectronsCuts
            && el->sigmaIEtaIEta_full5x5() <  0.0314
            && (el->hadronicOverEm() < 0.101)
            && el->ioEmIoP() < 0.0129 // like tight
-           && pfElectronIso(el) >= 0.107 // invert iso
+           && pfElectronIso(el) >= ElRelIso//0.107 // invert iso
            && pfElectronIso(el) < 1
            && el->missingHits() <= 1
            && el->passConversion())
@@ -620,7 +662,7 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedFakeLooseElectronsCuts
   return selectedElectrons;
 }
 
-std::vector<TRootElectron*> ElectronSelection::GetSelectedFakeTightElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr) const
+std::vector<TRootElectron*> ElectronSelection::GetSelectedFakeTightElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr, float ElRelIso) const
 {
   // (PLEASE UPDATE IF YOU CHANGE THIS CODE)
   //These quality cuts reflect the recommended Tight cut-based electron ID as provided by the EGM POG. Last updated: 7 October 2016
@@ -640,7 +682,7 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedFakeTightElectronsCuts
            && el->sigmaIEtaIEta_full5x5() < 0.011
            && el->hadronicOverEm() < 0.298
            && el->ioEmIoP() < 0.0129 // like tight id
-           && pfElectronIso(el) >=  0.0588 // invert iso
+           && pfElectronIso(el) >= ElRelIso// 0.0588 // invert iso
            && pfElectronIso(el) < 1 // extra cut on iso
            && el->missingHits() <= 1
            && el->passConversion())
@@ -656,7 +698,7 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedFakeTightElectronsCuts
            && el->sigmaIEtaIEta_full5x5() <  0.0314
            && (el->hadronicOverEm() < 0.101)
            && el->ioEmIoP() < 0.0129 // like tight
-           && pfElectronIso(el) >= 0.0571// invert iso
+           && pfElectronIso(el) >= ElRelIso//0.0571// invert iso
            && pfElectronIso(el) < 1
            && el->missingHits() <= 1
            && el->passConversion())
@@ -671,7 +713,7 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedFakeTightElectronsCuts
 }
 
 
-std::vector<TRootElectron*> ElectronSelection::GetSelectedVetoElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr) const
+std::vector<TRootElectron*> ElectronSelection::GetSelectedVetoElectronsCutsBasedSpring16_80X(float PtThr, float EtaThr, float ElRelIso) const
 {
   // (PLEASE UPDATE IF YOU CHANGE THIS CODE)
   //These quality cuts reflect the recommended Tight cut-based electron ID as provided by the EGM POG. Last updated: 7 October 2016
@@ -691,7 +733,7 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedVetoElectronsCutsBased
            && el->sigmaIEtaIEta_full5x5() < 0.0115
            && el->hadronicOverEm() < 0.356
            && el->ioEmIoP() < 0.299
-           && pfElectronIso(el) <  0.175
+           && pfElectronIso(el) < ElRelIso// 0.175
            && el->missingHits() <= 2
            && el->passConversion())
         {
@@ -706,7 +748,7 @@ std::vector<TRootElectron*> ElectronSelection::GetSelectedVetoElectronsCutsBased
            && el->sigmaIEtaIEta_full5x5() <  0.037
            && (el->hadronicOverEm() < 0.211)
            && el->ioEmIoP() < 0.15
-           && pfElectronIso(el) < 0.159
+           && pfElectronIso(el) < ElRelIso//0.159
            && el->missingHits() <= 3
            && el->passConversion())
         {

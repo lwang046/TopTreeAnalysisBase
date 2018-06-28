@@ -279,6 +279,11 @@ std::vector<TRootElectron*> Run2Selection::GetSelectedElectrons(float PtThr, flo
     return electronSelector->GetSelectedElectrons(PtThr, etaThr, WorkingPoint, ProductionCampaign, CutsBased, applyVID);
 }
 
+std::vector<TRootElectron*> Run2Selection::GetSelectedElectrons(float PtThr, float etaThr, float relIso, string WorkingPoint, string ProductionCampaign, bool CutsBased, bool applyVID) const
+{
+    return electronSelector->GetSelectedElectrons(PtThr, etaThr, relIso, WorkingPoint, ProductionCampaign, CutsBased, applyVID);
+}
+
 std::vector<TRootElectron*> Run2Selection::GetSelectedDisplacedElectrons(float PtThr, float EtaThr, float relIsoB, float relIsoEC, bool applyIso, bool applyId) const {
 
   return electronSelector->GetSelectedDisplacedElectrons(PtThr, EtaThr, relIsoB, relIsoEC, applyIso , applyId);
