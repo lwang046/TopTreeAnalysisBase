@@ -50,7 +50,7 @@ MultiSamplePlot::MultiSamplePlot(vector<Dataset*> datasets, string PlotName, int
     h->GetXaxis()->SetTitle(XaxisLabel_.c_str());
     h->GetYaxis()->SetTitle(YaxisLabel_.c_str());
 
-    
+    h->SetMinimum(0.001);
     plots_.push_back(pair<TH1F*,Dataset*>(h,datasets[i]));
     if(datasets[i]->Name().find("data") == 0 || datasets[i]->Name().find("Data") == 0 || datasets[i]->Name().find("DATA") == 0 )
       lumi_ = datasets[i]->EquivalentLumi();
@@ -385,6 +385,7 @@ void MultiSamplePlot::Draw(string label, unsigned int RatioType, bool addRatioEr
   leg_->SetLineWidth(1);
   leg_->SetLineStyle(0);
   leg_->SetBorderSize(0);
+  leg_->SetHeader(text_);
   if( ! showNumberEntries_ ) leg_->SetX1(0.76);
   
   //a second legend is needed because otherwise it will add the datasets two times to the same legend...
@@ -395,6 +396,7 @@ void MultiSamplePlot::Draw(string label, unsigned int RatioType, bool addRatioEr
   legAreaNorm_->SetLineWidth(1);
   legAreaNorm_->SetLineStyle(0);
   legAreaNorm_->SetBorderSize(1);
+  legAreaNorm_->SetHeader(text_);
   if( ! showNumberEntries_ ) legAreaNorm_->SetX1(0.76);
   
   //if running over data, add this one first in the legend
@@ -1050,7 +1052,7 @@ void MultiSamplePlot::DrawStackedPlot(TCanvas* canvas, TCanvas* canvasLogY, THSt
     }
   }
   
-  if(!text_.IsNull()) text.DrawLatex(0.2,0.9,text_);
+  //if(!text_.IsNull()) text.DrawLatex(0.4,0.8,text_);
   
   for(unsigned int i=0;i<histosForOverlay.size();i++)
   {
@@ -1088,7 +1090,7 @@ void MultiSamplePlot::DrawStackedPlot(TCanvas* canvas, TCanvas* canvasLogY, THSt
     cmstext.DrawLatex(posX_, posY_- relExtraDY*cmsTextSize*t, "Simulation");
   }
   
-  if(!text_.IsNull()) text.DrawLatex(0.5,0.86,text_);
+  //if(!text_.IsNull()) text.DrawLatex(0.5,0.86,text_);
   
   for(unsigned int i=0;i<histosForOverlay.size();i++)
   {
@@ -1109,7 +1111,7 @@ void MultiSamplePlot::DrawErrorBand(TH1F* totalSM, TH1F* hErrorPlus, TH1F* hErro
   float dummy[nbins];
   float erroryplus[nbins]; //will be the errors relative to the total histo
   float erroryminus[nbins]; //will be the errors relative to the total histo
-  float binwidth = totalSM->GetBinCenter(2) - totalSM->GetBinCenter(1); //assumes a fixed bin width...!
+  float binwidth;// = totalSM->GetBinCenter(2) - totalSM->GetBinCenter(1); //assumes a fixed bin width...!
   
   if((totalSM->GetNbinsX() != hErrorPlus->GetNbinsX()) || (totalSM->GetNbinsX() != hErrorMinus->GetNbinsX()))
     cout<<"[MultiSamplePlot::DrawErrorBand] ERROR: error histograms have different binning than total SM histogram!"<<endl;
@@ -1117,6 +1119,7 @@ void MultiSamplePlot::DrawErrorBand(TH1F* totalSM, TH1F* hErrorPlus, TH1F* hErro
   for(int iBin=0; iBin < totalSM->GetNbinsX()+1; iBin++)
   {
     bins[iBin] = totalSM->GetBinCenter(iBin);
+    binwidth = totalSM->GetBinLowEdge(iBin+1)-totalSM->GetBinLowEdge(iBin);
     if(dosystfile_)
     {
       //we still have to take into account if the systematic shifted histogram bin(s) are above the nominal or below, since the input root file contains histograms of just 'raw' systematic shifted distribution(s)

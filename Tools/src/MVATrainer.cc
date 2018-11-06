@@ -57,6 +57,11 @@ MVATrainer::MVATrainer(std::string Method, std::string OutputMVAWeightsPrefix, s
   Use["SVM"]             = 0;
   // ---
   Use["BDT"]             = 0;
+  Use["BDT375"]          = 0;
+  Use["BDT350"]          = 0;
+  Use["BDT4"]            = 0;
+  Use["BDT4375"]         = 0;
+  Use["BDT4350"]         = 0;
   Use["BDTD"]            = 0;
   Use["BDTG"]            = 0;
   Use["BDTB"]            = 0;
@@ -88,7 +93,7 @@ MVATrainer::MVATrainer(std::string Method, std::string OutputMVAWeightsPrefix, s
 
   // initialise TMVA Factory
 
-  std::string factoryOptions( "!V:!Silent:Transformations=I;D;P;G,D:!Color:!DrawProgressBar");
+  std::string factoryOptions( "!V:!Silent:Transformations=I:!Color:!DrawProgressBar");
 
   factory = new TMVA::Factory( OutputMVAWeights_.c_str(), outFile, factoryOptions );
 
@@ -401,7 +406,27 @@ void MVATrainer::TrainMVA(std::string SplitMode, std::string CutsS, int nTrainS,
 
    if (Use["BDT"])  // Adaptive Boost
       factory->BookMethod( TMVA::Types::kBDT, "BDT",
-                           "!H:!V:NTrees=400:nEventsMin=400:MaxDepth=3:BoostType=Grad:SeparationType=GiniIndex:nCuts=20:PruneMethod=NoPruning:NegWeightTreatment=Pray" );
+                           "!H:!V:NTrees=400:MinNodeSize=5%:MaxDepth=3:BoostType=AdaBoost:SeparationType=GiniIndex:nCuts=20:PruneMethod=NoPruning:NegWeightTreatment=Pray" );
+
+   if (Use["BDT375"])  // Adaptive Boost 375 trees
+      factory->BookMethod( TMVA::Types::kBDT, "BDT375",
+                           "!H:!V:NTrees=375:MinNodeSize=5%:MaxDepth=3:BoostType=AdaBoost:SeparationType=GiniIndex:nCuts=20:PruneMethod=NoPruning:NegWeightTreatment=Pray" );
+
+   if (Use["BDT350"])  // Adaptive Boost 350 trees
+      factory->BookMethod( TMVA::Types::kBDT, "BDT350",
+                           "!H:!V:NTrees=350:MinNodeSize=5%:MaxDepth=3:BoostType=AdaBoost:SeparationType=GiniIndex:nCuts=20:PruneMethod=NoPruning:NegWeightTreatment=Pray" );
+
+   if (Use["BDT4"])  // Adaptive Boost depth 4
+      factory->BookMethod( TMVA::Types::kBDT, "BDT4",
+                           "!H:!V:NTrees=400:MinNodeSize=5%:MaxDepth=4:BoostType=AdaBoost:SeparationType=GiniIndex:nCuts=20:PruneMethod=NoPruning:NegWeightTreatment=Pray" );
+
+   if (Use["BDT4375"])  // Adaptive Boostdepth 4 375 trees
+      factory->BookMethod( TMVA::Types::kBDT, "BDT4375",
+                           "!H:!V:NTrees=375:MinNodeSize=5%:MaxDepth=4:BoostType=AdaBoost:SeparationType=GiniIndex:nCuts=20:PruneMethod=NoPruning:NegWeightTreatment=Pray" );
+
+   if (Use["BDT4350"])  // Adaptive Boost depth 4 350 trees
+      factory->BookMethod( TMVA::Types::kBDT, "BDT4350",
+                           "!H:!V:NTrees=350:MinNodeSize=5%:MaxDepth=4:BoostType=AdaBoost:SeparationType=GiniIndex:nCuts=20:PruneMethod=NoPruning:NegWeightTreatment=Pray" );
 
    if (Use["BDTB"]) // Bagging
       factory->BookMethod( TMVA::Types::kBDT, "BDTB",
